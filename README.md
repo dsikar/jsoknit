@@ -11,6 +11,7 @@ ack request
 If an aknowledgement is required, an ack request should be part of the 
 JSON string. Consider the jsoknit definition below:
 
+```
 {"libdef":{
     "def":"833cd4e3",
     "app":"Led switch"},
@@ -32,6 +33,7 @@ JSON string. Consider the jsoknit definition below:
     }
  ]
 }
+```
 
 The sender has not included an ack request so no acknowledgment of receipt 
 will be sent back. ack requests should be included with a unique ack 
