@@ -1,0 +1,2 @@
+# jsoknit
+Jsoknit interface definition
