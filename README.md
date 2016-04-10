@@ -59,6 +59,7 @@ switch
 reader  
 writer  
 
+```
 {"libdef":{
     "def":"833cd4e3",
     "app":"Led switch"},
@@ -84,6 +85,7 @@ writer
     "retries":3},
  "ack":"833cd4e3:20160405224421"
 }
+```
 
 In this example, once the requester receives the libdef object definition,
 an ack must be returned in the form of:
