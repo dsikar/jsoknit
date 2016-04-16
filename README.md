@@ -1,6 +1,20 @@
 # jsoknit
 Jsoknit interface definition
 
+# INTRODUCTION
+
+The initial objectives of Jsoknit are 1) to create a JSON based method of
+defining embedded software functions such that functions may be called 
+remotely, 2) to create a parser able to deal with a jsoknit definition
+such that an interface may be readily available for controlling embedded
+software, 3) to facilitate IOT/IOE implementations by providing a single
+and consistent standard.  
+  
+By creating a consistent interface definition, that may be handled by 
+guests in a wide spectrum of computing devices, the hardware interface
+may be completely abstracted and potentially eliminated in some cases.  
+  
+
 Once a jsoknit enabled device receives a libdef request, it returns a JSON
 string containing a libdef object consisting of:
 1. def attribute with a unique identifier to be used in acknowledgement 
