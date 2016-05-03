@@ -1,19 +1,47 @@
-# jsoknit
-Jsoknit interface definition
+# Jsoknit
+This document describes the Jsoknit interface definition, a (http://www.json.org/ "JSON") based 
+method of creating embedded software interfaces, and some implementation examples.
 
 # INTRODUCTION
 
-The initial objectives of Jsoknit are 1) to create a JSON based method of
+The objectives of Jsoknit are 1) to create a JSON based method of
 defining embedded software functions such that functions may be called 
 remotely, 2) to create a parser able to deal with a jsoknit definition
 such that an interface may be readily available for controlling embedded
 software, 3) to facilitate IOT/IOE implementations by providing a single
-and consistent standard.  
+and consistent embedded software definition standard.      
   
-By creating a consistent interface definition, that may be handled by 
-guests in a wide spectrum of computing devices, the hardware interface
-may be completely abstracted and potentially eliminated in some cases.  
-  
+By creating a consistent interface definition, that can be handled by 
+various computing device guests, the hardware interface to the embedded software may
+be abstracted. 
+
+# QUICKSTART - THE LED EXAMPLE
+
+Consider the JSON string:
+
+```
+{"libdef":{
+    "def":"833cd4e3",
+    "app":"Led control"},
+ "function":[
+    {"id":1,
+     "label":"Led On",
+     "type":"button"
+    },
+    {"id":2,
+     "label":"Led Off",
+     "type":"button"
+    },
+    {"id":3,
+     "label":"Blink Led",
+     "type":"button"
+    }
+ ]
+}
+```
+
+The Jsoknit interface is defined at the embedded software level. The interface definition is returned in reply to a _libdef_ string sent to the embedded device. Sending JSON strings to the device, such as "{"id":1}", "{"id":2}" and "{"id":3}", would generate actions such as describe in the label attributes.
+
 
 Once a jsoknit enabled device receives a libdef request, it returns a JSON
 string containing a libdef object consisting of:
@@ -28,7 +56,7 @@ JSON string. Consider the jsoknit definition below:
 ```
 {"libdef":{
     "def":"833cd4e3",
-    "app":"Led switch"},
+    "app":"Led control"},
  "function":[
     {"id":1,
      "label":"Led On",
