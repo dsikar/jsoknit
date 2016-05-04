@@ -1,23 +1,24 @@
-# Jsoknit
-This document describes the Jsoknit interface definition, a (http://www.json.org/ "JSON") based 
+# JSOKNIT
+
+This document describes the Jsoknit interface definition, a [JSON](http://www.json.org/) based 
 method of creating embedded software interfaces, and some implementation examples.
 
-# INTRODUCTION
+## Motivation
 
-The objectives of Jsoknit are 1) to create a JSON based method of
-defining embedded software functions such that functions may be called 
-remotely, 2) to create a parser able to deal with a jsoknit definition
-such that an interface may be readily available for controlling embedded
-software, 3) to facilitate IOT/IOE implementations by providing a single
-and consistent embedded software definition standard.      
-  
-By creating a consistent interface definition, that can be handled by 
-various computing device guests, the hardware interface to the embedded software may
-be abstracted. 
+As the world becomes more connected, it is desirable that embedded devices speak a common language, such that they may be accessed by any computing device capable of understanding the language.  
 
-# QUICKSTART - THE LED EXAMPLE
+By creating a consistent interface definition, that can be handled by various computing device guests, the hardware interface to the embedded software e.g. buttons, displays, etc, may be abstracted, facilitating IOT/IOE implementations.
 
-Consider the JSON string:
+## Jsoknit Implementation Elements
+
+To implement a Jsoknit interface two basic elements are required:  
+1. A _libdef_ library definition JSON string on the embedded device  
+2. A Jsoknit engine on the client  
+A Jsoknit engine is capable of requesting the libdef library definition from the embedded device and implementing a graphical interface on the fly, as well as exposing the definition for additional uses that may not involve graphical interfaces, or graphical interfaces that combine any number of Jsoknit devices, as well as any other desired inputs.
+
+## Quickstart
+
+On the embedded device, a Jsoknit library definition libdef string or array of characters is defined:
 
 ```
 {"libdef":{
@@ -40,7 +41,7 @@ Consider the JSON string:
 }
 ```
 
-The Jsoknit interface is defined at the embedded software level. The interface definition is returned in reply to a _libdef_ string sent to the embedded device. Sending JSON strings to the device, such as "{"id":1}", "{"id":2}" and "{"id":3}", would generate actions such as describe in the label attributes.
+The Jsoknit definition is returned in reply to a _libdef_ string sent to the embedded device. Sending JSON strings to the device, such as "{"id":1}", "{"id":2}" and "{"id":3}", would generate actions such as describe in the label attributes.
 
 
 Once a jsoknit enabled device receives a libdef request, it returns a JSON
