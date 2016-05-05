@@ -14,7 +14,7 @@ By creating a consistent interface definition, that can be handled by various co
 To implement a Jsoknit interface two basic elements are required:  
 1. A _libdef_ library definition JSON string on the embedded device  
 2. A Jsoknit engine on the client  
-A Jsoknit engine is capable of requesting the libdef library definition from the embedded device and implementing a graphical interface on the fly, as well as exposing the definition for additional uses that may not involve graphical interfaces, or graphical interfaces that combine any number of Jsoknit devices, as well as any other desired inputs.
+A Jsoknit engine is capable of requesting the libdef library definition from the embedded device and implementing a graphical interface on the fly, as well as exposing the definition for additional uses by applications sitting behind the Jsoknit engine, that for example may not involve graphical interfaces, or graphical interfaces that combine any number of Jsoknit devices, as well as any other desired inputs.
 
 ## Quickstart
 
@@ -22,7 +22,7 @@ On the embedded device, a Jsoknit library definition libdef string or array of c
 
 ```
 {"libdef":{
-    "def":"833cd4e3",
+    "def":"06dca25c-5810-4ea2-8c68-b2f73c8da162",
     "app":"Led control"},
  "function":[
     {"id":1,
@@ -41,8 +41,59 @@ On the embedded device, a Jsoknit library definition libdef string or array of c
 }
 ```
 
-The Jsoknit definition is returned in reply to a _libdef_ string sent to the embedded device. Sending JSON strings to the device, such as "{"id":1}", "{"id":2}" and "{"id":3}", would generate actions such as describe in the label attributes.
+Typically this would be in a libdef.h include, with all quotes escaped e.g.
 
+```
+const char *libdef =
+"  {\"libdef\":{ \
+    \"def\":\"06dca25c-5810-4ea2-8c68-b2f73c8da162\", \
+    \"app\":\"Led control\"}, \
+ \"function\":[ \
+    {\"id\":1, \
+     \"label\":\"Led On\", \
+(...)
+```
+
+The embedded device listens to incoming  requests via a serial port, be it USB, Ethernet, RS232, RS485, SPI, I<sup>2</sup>C, Bluetooth, Wi-Fi, etc. If the guest sends keyword _libdef_ to the embedded device, the library definition must be returned to the guest. Once the library definition is parsed by the guest's Jsoknit engine, all required graphical elements are created. A Jsoknit Android engine looks like this:
+
+```
+(...)
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.linearLayoutID);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        try {
+            for(int i = 0; i < jsoknit.functions.size(); i++) {
+                JsoknitObject.Function func = jsoknit.functions.get(i);
+
+                LinearLayout row = new LinearLayout(getContext());
+                row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                switch(func.type) {
+                    case "button":
+                        Button btnTag = new Button(getContext());
+                        btnTag.setOnClickListener(listener);
+(...)
+```
+Once the widgets are created, the guest is able to send requests back to the embedded device.
+Functions are called by id. The JSON string **{"id":1}** once sent to the embedded device would be dealt with by a call to a parser.
+
+```
+void Parse(String content) {  
+  int str_len = content.length() + 1;
+  char char_array[str_len];
+  content.toCharArray(char_array, str_len);
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(char_array);
+  int id = root["id"];
+  switch (id) {
+    case 1:
+      // Led On
+      break;
+    case 2:
+      // Led Off
+      break;
+(...)
+```
 
 Once a jsoknit enabled device receives a libdef request, it returns a JSON
 string containing a libdef object consisting of:
